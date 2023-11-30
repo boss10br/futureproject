@@ -1,0 +1,61 @@
+// This contract implements an auction with a reserve price.
+
+// Structs
+struct Auction {
+  // The owner of the auction.
+  owner: felt;
+  // The current highest bid.
+  highest_bid: felt;
+  // The reserve price.
+  reserve_price: felt;
+  // The end date of the auction.
+  end_date: felt;
+}
+
+// Functions
+
+// Creates a new auction.
+@external
+func create(owner: felt, end_date: felt, reserve_price: felt) -> Auction {
+  // Creates a new auction.
+  let auction = Auction(owner: owner, highest_bid: 0, reserve_price: reserve_price, end_date: end_date);
+
+  // Returns the auction.
+  return auction;
+}
+
+// Bids on an auction.
+@external
+func bid(auction: Auction, amount: felt) {
+  // Asserts that the auction is still running.
+  assert(auction.end_date > now);
+
+  // Asserts that the bid is higher than the current highest bid or the reserve price.
+  assert(amount > auction.highest_bid || amount > auction.reserve_price);
+
+  // Updates the highest bid.
+  auction.highest_bid = amount;
+}
+
+// Gets the highest bid for an auction.
+@external
+func get_highest_bid(auction: Auction) -> felt {
+  // Returns the highest bid.
+  return auction.highest_bid;
+}
+
+// Ends an auction.
+@external
+func end(auction: Auction) {
+  // Asserts that the auction is still running.
+  assert(auction.end_date <= now);
+
+  // Checks if the highest bid is higher than the reserve price.
+  if auction.highest_bid < auction.reserve_price {
+    // The auction is not sold.
+    return;
+  }
+
+  // Sets the highest bidder as the owner of the auction.
+  auction.owner = auction.highest_bid;
+}
