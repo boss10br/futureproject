@@ -1,0 +1,17 @@
+// Creates a new auction.
+let auction = create(owner: 1, end_date: 10000000);
+
+// Makes a bid of 100.
+bid(auction: auction, amount: 100);
+
+// Makes a bid of 200.
+bid(auction: auction, amount: 200);
+
+// Gets the highest bid.
+let highest_bid = get_highest_bid(auction: auction);
+
+// Asserts that the highest bid is 200.
+assert(highest_bid == 200);
+
+// Ends the auction.
+end(auction: auction);
