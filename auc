@@ -1,0 +1,17 @@
+// Creates a new auction with a reserve price of 100.
+let auction = create(owner: 1, end_date: 10000000, reserve_price: 100);
+
+// Makes a bid of 100.
+bid(auction: auction, amount: 100);
+
+// Gets the highest bid.
+let highest_bid = get_highest_bid(auction: auction);
+
+// Asserts that the auction is still running.
+assert(auction.end_date > now);
+
+// Asserts that the highest bid is lower than the reserve price.
+assert(highest_bid < auction.reserve_price);
+
+// Ends the auction.
+end(auction: auction);
