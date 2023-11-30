@@ -1,0 +1,53 @@
+// This contract implements a simple auction.
+
+// Structs
+struct Auction {
+  // The owner of the auction.
+  owner: felt;
+  // The current highest bid.
+  highest_bid: felt;
+  // The end date of the auction.
+  end_date: felt;
+}
+
+// Functions
+
+// Creates a new auction.
+@external
+func create(owner: felt, end_date: felt) -> Auction {
+  // Creates a new auction.
+  let auction = Auction(owner: owner, highest_bid: 0, end_date: end_date);
+
+  // Returns the auction.
+  return auction;
+}
+
+// Bids on an auction.
+@external
+func bid(auction: Auction, amount: felt) {
+  // Asserts that the auction is still running.
+  assert(auction.end_date > now);
+
+  // Asserts that the bid is higher than the current highest bid.
+  assert(amount > auction.highest_bid);
+
+  // Updates the highest bid.
+  auction.highest_bid = amount;
+}
+
+// Gets the highest bid for an auction.
+@external
+func get_highest_bid(auction: Auction) -> felt {
+  // Returns the highest bid.
+  return auction.highest_bid;
+}
+
+// Ends an auction.
+@external
+func end(auction: Auction) {
+  // Asserts that the auction is still running.
+  assert(auction.end_date <= now);
+
+  // Sets the highest bidder as the owner of the auction.
+  auction.owner = auction.highest_bid;
+}
